@@ -17,7 +17,6 @@ class PizzaOrder
   def save()
     sql = "INSERT INTO pizza_orders
     (
-
       topping,
       quantity,
       customer_id

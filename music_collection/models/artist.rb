@@ -1,5 +1,5 @@
 require 'pg'
-
+require 'pry'
 require_relative '../db/music_sql_runner.rb'
 
 
@@ -38,13 +38,25 @@ class Artist
 
     result = SqlRunner.run(sql, values)
     @id = result[0]['id'].to_i
+    # binding.pry
   end
 
   def self.all()
     sql = "SELECT * FROM artists"
     result = SqlRunner.run(sql)
     array_of_artist_objects = result.map {|artist_hash| Artist.new(artist_hash)}
+
+    # good way to check what column values for each row of returned result from running the query are:
+    # result.each do |res|
+    #   p "Row: #{result.find_index(res)+1}"
+    #   for k, v in res
+    #     puts "Column: --#{k}-- returned with value of: --#{v}--"
+    #   end
+    # end
+    # binding.pry
+
     return array_of_artist_objects
+
   end
 
   def self.delete_all
@@ -65,7 +77,16 @@ class Artist
     sql = "UPDATE artists SET artist_name = $1
           WHERE id = $2"
     values = [@artist_name, @id]
-    SqlRunner.run(sql, values)
+    result = SqlRunner.run(sql, values)
+    # binding.pry
+    #
+    # result.each do |res|
+    #   p "Row: #{result.find_index(res)+1}"
+    #   for k, v in res
+    #     puts "Column: --#{k}-- returned with value of: --#{v}--"
+    #   end
+    # end
+
   end
 
   def delete()
@@ -79,7 +100,7 @@ class Artist
     sql = "SELECT * FROM artists WHERE id = $1"
     values = [id]
     results = SqlRunner.run(sql, values)
-    
+
     artist_object = Artist.new(results[0])
     return artist_object
   end
